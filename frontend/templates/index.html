@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vote Now!</title>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+  <h1>Vote for your favorite animal!</h1>
+  <button onclick="sendVote('dogs')">Dogs</button>
+  <button onclick="sendVote('cats')">Cats</button>
+  <button onclick="sendVote('birds')">Birds</button>
+  <button onclick="sendVote('fish')">Fish</button>
+  <h2>Results</h2>
+  <p id="results">{{ votes }}</p>
+</body>
+</html>
