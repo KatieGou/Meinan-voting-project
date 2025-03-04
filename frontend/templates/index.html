@@ -5,13 +5,23 @@
   <title>Vote Now!</title>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
+
 <body>
   <h1>Vote for your favorite animal!</h1>
   <button onclick="sendVote('dogs')">Dogs</button>
   <button onclick="sendVote('cats')">Cats</button>
   <button onclick="sendVote('birds')">Birds</button>
   <button onclick="sendVote('fish')">Fish</button>
-  <h2>Results</h2>
-  <p id="results">{{ votes }}</p>
+  
+  <h2>Your vote:</h2>
+  <!-- show user's vote here -->
+  <p id="user-vote">None</p>
+
+  <h2>Results:</h2>
+  <!-- show total votes -->
+  <p>Dogs: <span id="dogs-votes">0</span></p>
+  <p>Cats: <span id="cats-votes">0</span></p>
+  <p>Birds: <span id="birds-votes">0</span></p>
+  <p>Fish: <span id="fish-votes">0</span></p>
 </body>
 </html>

@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-redis_client = redis.Redis(host="redis", port=6379)
+redis_client = redis.Redis(host="redis-server", port=6379, decode_responses=True)
 
 
 def initialize_votes():
@@ -36,9 +36,9 @@ def vote():
 
 
 @app.route("/results", methods=["GET"])
-def results():   
+def results():
     votes = {
-        animal.decode(): int(redis_client.get(animal)) for animal in redis_client.keys()
+        animal: int(redis_client.get(animal)) for animal in redis_client.keys()
     }
     return jsonify(votes)
 

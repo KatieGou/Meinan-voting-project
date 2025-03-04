@@ -6,13 +6,23 @@ async function sendVote(option) {
     });
 
     const result = await response.json();
-    document.getElementById("result").innerText = JSON.stringify(result.your_vote);
+
+    // Instantly update the "Your Vote" section
+    document.getElementById("user-vote").innerText = `Your Vote: ${result.your_vote}`;
+
+    // Fetch updated vote results
+    fetchResults();
 }
 
 async function fetchResults() {
     const response = await fetch('/results');
     const result = await response.json();
-    document.getElementById("vote-results").innerText = JSON.stringify(result);
+
+    // Update the vote counts
+    document.getElementById("dogs-votes").innerText = result.dogs;
+    document.getElementById("cats-votes").innerText = result.cats;
+    document.getElementById("birds-votes").innerText = result.birds;
+    document.getElementById("fish-votes").innerText = result.fish;
 }
 
 // Auto refresh results every 5 seconds
