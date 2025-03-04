@@ -37,9 +37,7 @@ def vote():
 
 @app.route("/results", methods=["GET"])
 def results():
-    votes = {
-        animal: int(redis_client.get(animal)) for animal in redis_client.keys()
-    }
+    votes = {animal: int(redis_client.get(animal)) for animal in redis_client.keys()}
     return jsonify(votes)
 
 

@@ -26,4 +26,4 @@ async function fetchResults() {
 }
 
 // Auto refresh results every 5 seconds
-setInterval(fetchResults, 500);
+setInterval(fetchResults, 1000);
