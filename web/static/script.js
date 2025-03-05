@@ -25,5 +25,5 @@ async function fetchResults() {
     document.getElementById("fish-votes").innerText = result.fish;
 }
 
-// Auto refresh results every 5 seconds
-setInterval(fetchResults, 1000);
+// Auto refresh results every 10 seconds
+setInterval(fetchResults, 10000);
