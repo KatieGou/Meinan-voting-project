@@ -31,7 +31,7 @@ while True:
 cur.execute("""
 CREATE TABLE IF NOT EXISTS votes (
     id SERIAL PRIMARY KEY,
-    animal VARCHAR(255) NOT NULL,
+    animal VARCHAR(255) NOT NULL UNIQUE,
     count INT NOT NULL
 )
 """)
@@ -46,8 +46,12 @@ def transfer_votes():
         for animal, count in votes.items():
             if count:
                 logging.info(f"Transferring {count} votes for {animal}")
-                cur.execute(
-                    "INSERT INTO votes (animal, count) VALUES (%s, %s)", (animal, count)
+                cur.execute("""
+                INSERT INTO votes (animal, count) 
+                    VALUES (%s, %s)
+                    ON CONFLICT (animal)
+                    DO UPDATE SET count = votes.count + EXCLUDED.count
+                """, (animal, count)
                 )
                 conn.commit()
                 redis_client.set(animal, 0)
