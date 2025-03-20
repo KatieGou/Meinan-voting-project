@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vote Result</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+      setInterval(function() {
+        window.location.reload();
+      }, 10000);
+    </script>
+  </head>
+
+  <body>
+    <h1>Voting Result</h1>
+    <!-- TODO: animals ordered by votes -->
+    <ul>
+      {% for animal, count in votes.items() %}
+        <li>{{ animal }}: {{ count }} votes ({{ percent_votes[animal]|round(2) }}%)</li>
+      {% endfor %}
+    </ul>
+    <h2>Total Votes: </h2>
+    <p>{{ total_votes }}</p>
+    <h2>Winner: </h2>
+    <p>{{ winner }}</p>
+  </body>
+</html>

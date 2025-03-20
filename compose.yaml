@@ -49,21 +49,22 @@ services:
       - REDIS_HOST=redis-server
       - POSTGRES_HOST=postgres-server
   
-
-  # result:
-  #   build:
-  #     context: .
-  #     dockerfile: result/Dockerfile
-  #   container_name: result-server
-  #   ports:
-  #     - "5001:5001"
-  #   networks:
-  #     - voting-network
-  #   depends_on:
-  #     - redis
-  #     - postgres
-  #   environment:
-  #     - POSTGRES_HOST=postgres-server
+  result:
+    build:
+      context: .
+      dockerfile: result/Dockerfile
+    container_name: result-server
+    ports:
+      - "5001:5001"
+    networks:
+      - voting-network
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres-server
+    volumes:
+      - ./result:/app
 
 networks:
   voting-network:
