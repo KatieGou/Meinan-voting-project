@@ -2,7 +2,11 @@ from flask import Flask, render_template, request, jsonify
 import redis
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
 app = Flask(__name__)
 redis_client = redis.Redis(host="redis-server", port=6379, decode_responses=True)
@@ -35,10 +39,10 @@ def vote():
         return jsonify({"message": "Invalid animal", "your_vote": "None"}), 400
 
 
-@app.route("/results", methods=["GET"])
-def results():
-    votes = {animal: int(redis_client.get(animal)) for animal in redis_client.keys()}
-    return jsonify(votes)
+# @app.route("/results", methods=["GET"])
+# def results():
+#     votes = {animal: int(redis_client.get(animal)) for animal in redis_client.keys()}
+#     return jsonify(votes)
 
 
 if __name__ == "__main__":
