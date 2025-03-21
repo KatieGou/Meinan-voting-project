@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #00adb5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    color: #393e46;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #393e46;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #393e46;
+    margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Add space between buttons */
+}
+
+button {
+    background-color: #eeeeee;
+    color: #222831;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

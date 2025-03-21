@@ -23,7 +23,7 @@ while True:
         cur = conn.cursor()
         logging.info("Connected to PostgreSQL")
         break
-    except psycopg2.OperationalError as e:
+    except psycopg2.OperationalError:
         logging.warning("Could not connect to PostgreSQL. Retrying...")
         time.sleep(3)
 
@@ -46,12 +46,14 @@ def transfer_votes():
         for animal, count in votes.items():
             if count:
                 logging.info(f"Transferring {count} votes for {animal}")
-                cur.execute("""
+                cur.execute(
+                    """
                 INSERT INTO votes (animal, count) 
                     VALUES (%s, %s)
                     ON CONFLICT (animal)
                     DO UPDATE SET count = votes.count + EXCLUDED.count
-                """, (animal, count)
+                """,
+                    (animal, count),
                 )
                 conn.commit()
                 redis_client.set(animal, 0)

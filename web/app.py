@@ -39,11 +39,5 @@ def vote():
         return jsonify({"message": "Invalid animal", "your_vote": "None"}), 400
 
 
-# @app.route("/results", methods=["GET"])
-# def results():
-#     votes = {animal: int(redis_client.get(animal)) for animal in redis_client.keys()}
-#     return jsonify(votes)
-
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

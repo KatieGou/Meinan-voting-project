@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Vote Result</title>
+    <!-- link to the external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
       setInterval(function() {
@@ -13,15 +15,16 @@
 
   <body>
     <h1>Voting Result</h1>
-    <!-- TODO: animals ordered by votes -->
     <ul>
       {% for animal, count in votes.items() %}
-        <li>{{ animal }}: {{ count }} votes ({{ percent_votes[animal]|round(2) }}%)</li>
+        <li>{{ animal }}: {{ count }} votes ({{ percent_votes[animal]|round(1) }}%)</li>
       {% endfor %}
     </ul>
-    <h2>Total Votes: </h2>
-    <p>{{ total_votes }}</p>
-    <h2>Winner: </h2>
-    <p>{{ winner }}</p>
+    <div class="mt-4">
+      <h2>Total Votes: </h2>
+      <p>{{ total_votes }}</p>
+      <h2>Winner: </h2>
+      <p>{{ winner }} 🎉</p>
+    </div>
   </body>
 </html>

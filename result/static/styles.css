@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #ffd460;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    color: #2d4059;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #2d4059;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #2d4059;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: #f07b3f;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.mt-4 {
+    margin-top: 20px;
+}

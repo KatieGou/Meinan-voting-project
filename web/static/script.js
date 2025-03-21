@@ -8,5 +8,5 @@ async function sendVote(option) {
     const result = await response.json();
 
     // Instantly update the "Your Vote" section
-    document.getElementById("user-vote").innerText = `Your Vote: ${result.your_vote}`;
+    document.getElementById("user-vote").innerText = `${result.your_vote}`;
 }
