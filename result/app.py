@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 import logging
+import os
 
 logging.basicConfig(
     level=logging.INFO,
@@ -9,8 +10,14 @@ logging.basicConfig(
 )
 app = Flask(__name__)
 
+username = os.getenv("PGUSER", "postgres")
+password = os.getenv("PGPASSWORD", "postgres")
+host = os.getenv("PGHOST", "postgres-service")
+port = os.getenv("PGPORT", 5432)
+database = os.getenv("PGDATABASE", "postgres")
+
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:postgres@postgres-service:5432/postgres"
+    f"postgresql://{username}:{password}@{host}:{port}/{database}"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

@@ -22,4 +22,4 @@ MiniKube start: `minikube start`
 MiniKube dashboard: `minikube dashboard`
 Check if an image exists in minikube: `minikube ssh 'docker images | grep <image-name>'`
 Load an image into minikube: minikube image load <image-name>
-Access Voting app: `minikube service web-service`
+Access Voting app: `minikube service <service-name>`
