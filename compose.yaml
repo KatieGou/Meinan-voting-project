@@ -1,13 +1,13 @@
 services:
   redis:
     image: redis
-    container_name: redis-server
+    container_name: redis-service
     networks:
       - voting-network
 
   postgres:
     image: postgres
-    container_name: postgres-server
+    container_name: postgres-service
     networks:
       - voting-network
     ports:
@@ -21,7 +21,8 @@ services:
     build: 
       context: .
       dockerfile: web/Dockerfile
-    container_name: web-server
+    image: web-server
+    container_name: web-service
     ports:
       - "5000:5000"
     networks:
@@ -30,8 +31,8 @@ services:
       - redis
       - postgres
     environment:
-      - REDIS_HOST=redis-server
-      - POSTGRES_HOST=postgres-server
+      - REDIS_HOST=redis-service
+      - POSTGRES_HOST=postgres-service
     volumes:
       - ./web:/app
 
@@ -39,21 +40,23 @@ services:
     build:
       context: .
       dockerfile: worker/Dockerfile
-    container_name: worker-server
+    image: worker-server
+    container_name: worker-service
     networks:
       - voting-network
     depends_on:
       - redis
       - postgres
     environment:
-      - REDIS_HOST=redis-server
-      - POSTGRES_HOST=postgres-server
+      - REDIS_HOST=redis-service
+      - POSTGRES_HOST=postgres-service
   
   result:
     build:
       context: .
       dockerfile: result/Dockerfile
-    container_name: result-server
+    image: result-server
+    container_name: result-service
     ports:
       - "5001:5001"
     networks:
@@ -62,7 +65,7 @@ services:
       - redis
       - postgres
     environment:
-      - POSTGRES_HOST=postgres-server
+      - POSTGRES_HOST=postgres-service
     volumes:
       - ./result:/app
 

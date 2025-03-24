@@ -10,7 +10,7 @@ logging.basicConfig(
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres:postgres@postgres-server:5432/postgres"
+    "postgresql://postgres:postgres@postgres-service:5432/postgres"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

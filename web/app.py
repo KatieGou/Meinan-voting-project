@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import redis
 import logging
+import os
+import time
 
 logging.basicConfig(
     level=logging.INFO,
@@ -9,7 +11,23 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-redis_client = redis.Redis(host="redis-server", port=6379, decode_responses=True)
+redis_host = os.getenv("REDIS_HOST", "localhost")
+redis_port = os.getenv("REDIS_PORT", 6379)
+redis_client = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
+
+
+def wait_for_redis():
+    retries = 5
+    while retries > 0:
+        try:
+            redis_client.ping()
+            logging.info("Connected to Redis")
+            break
+        except redis.ConnectionError:
+            logging.warning("Could not connect to Redis. Retrying...")
+            time.sleep(3)
+            retries -= 1
+    raise Exception("Could not connect to Redis")
 
 
 def initialize_votes():
@@ -19,6 +37,7 @@ def initialize_votes():
             redis_client.set(animal, count)
 
 
+wait_for_redis()
 initialize_votes()
 
 

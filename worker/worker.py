@@ -9,7 +9,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-redis_client = redis.Redis(host="redis-server", port=6379, decode_responses=True)
+redis_client = redis.Redis(host="redis-service", port=6379, decode_responses=True)
 
 while True:
     try:
@@ -17,7 +17,7 @@ while True:
             dbname="postgres",
             user="postgres",
             password="postgres",
-            host="postgres-server",
+            host="postgres-service",
             port="5432",
         )
         cur = conn.cursor()
