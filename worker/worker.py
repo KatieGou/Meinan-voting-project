@@ -2,6 +2,7 @@ import redis
 import psycopg2
 import time
 import logging
+import os
 
 logging.basicConfig(
     level=logging.INFO,
@@ -9,16 +10,18 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-redis_client = redis.Redis(host="redis-service", port=6379, decode_responses=True)
+redis_host = os.getenv("REDIS_HOST", "localhost")
+redis_port = os.getenv("REDIS_PORT", 6379)
+redis_client = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
 
 while True:
     try:
         conn = psycopg2.connect(
-            dbname="postgres",
-            user="postgres",
-            password="postgres",
-            host="postgres-service",
-            port="5432",
+            dbname=os.getenv("PGDATABASE", "postgres"),
+            user=os.getenv("PGUSER", "postgres"),
+            password=os.getenv("PGPASSWORD", "postgres"),
+            host=os.getenv("PGHOST", "postgres-service"),
+            port=os.getenv("PGPORT", 5432),
         )
         cur = conn.cursor()
         logging.info("Connected to PostgreSQL")

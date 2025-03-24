@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: worker-image
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REDIS_HOST
+              value: redis-service
+            - name: REDIS_PORT
+              value: "6379"
+            - name: PGUSER
+              value: postgres
+            - name: PGHOST
+              value: postgres-service
+            - name: PGDATABASE
+              value: postgres
+            - name: PGPASSWORD
+              value: postgres
+            - name: PGPORT
+              value: "5432"
