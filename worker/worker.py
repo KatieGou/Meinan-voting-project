@@ -3,25 +3,26 @@ import psycopg2
 import time
 import logging
 import os
+from config import config, configure_logging
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+configure_logging()
+
+env = os.getenv("FLASK_ENV", "development")
+app_config = config[env]
+redis_client = redis.Redis(
+    host=app_config.REDIS_HOST,
+    port=app_config.REDIS_PORT,
+    decode_responses=app_config.DECODE_RESPONSES,
 )
-
-redis_host = os.getenv("REDIS_HOST", "localhost")
-redis_port = os.getenv("REDIS_PORT", 6379)
-redis_client = redis.Redis(host=redis_host, port=redis_port, decode_responses=True)
 
 while True:
     try:
         conn = psycopg2.connect(
-            dbname=os.getenv("PGDATABASE", "postgres"),
-            user=os.getenv("PGUSER", "postgres"),
-            password=os.getenv("PGPASSWORD", "postgres"),
-            host=os.getenv("PGHOST", "postgres-service"),
-            port=os.getenv("PGPORT", 5432),
+            dbname=app_config.DB_NAME,
+            user=app_config.DB_USER,
+            password=app_config.DB_PASSWORD,
+            host=app_config.DB_HOST,
+            port=app_config.DB_PORT,
         )
         cur = conn.cursor()
         logging.info("Connected to PostgreSQL")

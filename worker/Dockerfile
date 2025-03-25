@@ -7,4 +7,6 @@ RUN pip3 install -r requirements.txt
 
 COPY worker .
 
+COPY config.py .env ./
+
 CMD ["python3", "worker.py"]

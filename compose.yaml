@@ -21,7 +21,7 @@ services:
     build: 
       context: .
       dockerfile: web/Dockerfile
-    image: web-server
+    image: web-image
     container_name: web-service
     ports:
       - "5000:5000"
@@ -30,9 +30,6 @@ services:
     depends_on:
       - redis
       - postgres
-    environment:
-      - REDIS_HOST=redis-service
-      - POSTGRES_HOST=postgres-service
     volumes:
       - ./web:/app
 
@@ -40,22 +37,19 @@ services:
     build:
       context: .
       dockerfile: worker/Dockerfile
-    image: worker-server
+    image: worker-image
     container_name: worker-service
     networks:
       - voting-network
     depends_on:
       - redis
       - postgres
-    environment:
-      - REDIS_HOST=redis-service
-      - POSTGRES_HOST=postgres-service
   
   result:
     build:
       context: .
       dockerfile: result/Dockerfile
-    image: result-server
+    image: result-image
     container_name: result-service
     ports:
       - "5001:5001"
@@ -64,8 +58,6 @@ services:
     depends_on:
       - redis
       - postgres
-    environment:
-      - POSTGRES_HOST=postgres-service
     volumes:
       - ./result:/app
 
