@@ -80,8 +80,15 @@ This project is a voting application built with Flask, Redis, and PostgreSQL. It
 - MiniKube dashboard: `minikube dashboard`
 - Check if an image exists in minikube: `minikube ssh 'docker images | grep <image-name>'`
 - Load an image into minikube: minikube image load <image-name>
-- Access Voting app: `minikube service <service-name>`
+- Access Voting app via a browser: `minikube service <service-name>`
+- Port-Forward the PostgreSQL Service: `kubectl port-forward svc/postgres-service 5432:5432`
 - Get services, pods, deployments: `kubectl get svc,pods,deploy`
 - Get logs: `kubectl logs <pod-name>`
 - Delete all: `kubectl delete all --all`
 - Delete a specific resource: `kubectl delete <resource> <resource-name>`
+
+### Helm
+- Install Helm: `brew install helm`
+`helm list`
+`helm install meinan-voting-app ./meinan-voting-app`
+`helm uninstall meinan-voting-app`

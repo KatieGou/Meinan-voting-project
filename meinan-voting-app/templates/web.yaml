@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+spec:
+  replicas: {{ .Values.web.replicaCount }}
+  selector: 
+    matchLabels: 
+      app: {{ .Release.Name }}-web
+  template:
+    metadata: 
+      labels: 
+        app: {{ .Release.Name }}-web
+    spec:
+      containers: 
+        - name: web
+          image: {{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          ports: 
+            - containerPort: {{ .Values.web.service.port }}
+          env:
+            - name: REDIS_HOST
+              value: {{ .Values.web.env.REDIS_HOST | quote }}
+            - name: REDIS_PORT
+              value: {{ .Values.web.env.REDIS_PORT | quote }}
+            
