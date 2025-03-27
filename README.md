@@ -9,6 +9,7 @@ This project is a voting application built with Flask, Redis, and PostgreSQL. It
 - Docker Compose
 - Kubernetes (Minikube or any other Kubernetes cluster)
 - `pre-commit` (for code formatting and linting)
+- Helm (for Kubernetes package management)
 
 ## Environment Setup
 1. **Create and activate a virtual environment:**
@@ -36,25 +37,31 @@ This project is a voting application built with Flask, Redis, and PostgreSQL. It
     ```sh
     minikube start
     ```
-3. **Load the images into Minikube:**
+3. **Point the shell to minikube's docker-daemon:**
     ```sh
-    minikube image load <image-name>
+    eval $(minikube -p minikube docker-env)
     ```
-4. **Deploy the application:**
+4. **Build the images within minikube's docker-daemon:**
     ```sh
-    kubectl apply -f k8s/
+    docker compose build
     ```
-5. **Access the application:**
+5. **Deploy the Application:**
+    ```sh
+    helm upgrade --install meinan-voting-app ./meinan-voting-app
     ```
-    minikube service <service-name>
+6. **Access the application:**
+    ```sh
+    minikube service meinan-voting-app-result-service
+    minikube service meinan-voting-app-web-service
     ```
-6. **Stop Minikube:**
+    The application should now be accessible in your browser.
+7. **Stop Minikube:**
     ```sh
     minikube stop
     ```
-7. **Delete the application:**
+8. **Delete the application:**
     ```sh
-    kubectl delete -f k8s/
+    helm delete meinan-voting-app
     ```
 
 ## Helpful Commands
@@ -91,6 +98,10 @@ This project is a voting application built with Flask, Redis, and PostgreSQL. It
 
 ### Helm
 - Install Helm: `brew install helm`
-`helm list`
-`helm install meinan-voting-app ./meinan-voting-app`
-`helm uninstall meinan-voting-app`
+- List Helm releases: `helm list`
+- Deploy a Helm chart: `helm install <release-name> <chart-path>`
+- Uninstall a Helm release: `helm uninstall <release-name>`
+- Upgrade a Helm release: `helm upgrade <release-name> <chart-path>`
+- Rollback a Helm release: `helm rollback <release-name> <revision>`
+- Get Helm release history: `helm history <release-name>`
+- Get Helm release status: `helm status <release-name>`
