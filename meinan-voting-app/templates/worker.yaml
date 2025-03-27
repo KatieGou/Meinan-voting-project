@@ -1,0 +1,34 @@
+# Worker deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-worker
+    spec:
+      containers:
+        - name: worker
+          image: {{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          env:
+            - name: REDIS_HOST
+              value: {{ .Release.Name }}-{{ .Values.redis.service.name }}
+            - name: REDIS_PORT
+              value: {{ .Values.worker.env.REDIS_PORT | quote }}
+            - name: DB_USER
+              value: {{ .Values.worker.env.DB_USER | quote }}
+            - name: DB_PASSWORD
+              value: {{ .Values.worker.env.DB_PASSWORD | quote }}
+            - name: DB_HOST
+              value: {{ .Release.Name }}-{{ .Values.postgres.service.name }}
+            - name: DB_PORT
+              value: {{ .Values.worker.env.DB_PORT | quote }}
+            - name: DB_NAME
+              value: {{ .Values.worker.env.DB_NAME | quote }}

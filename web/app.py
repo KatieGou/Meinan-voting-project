@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 env = os.getenv("FLASK_ENV", "development")
 app_config = config[env]
+
 redis_client = redis.Redis(
     host=app_config.REDIS_HOST,
     port=app_config.REDIS_PORT,
@@ -25,7 +26,8 @@ def wait_for_redis():
             redis_client.ping()
             logging.info("Connected to Redis")
             break
-        except redis.ConnectionError:
+        except redis.ConnectionError as e:
+            logging.error(e)
             logging.warning("Could not connect to Redis. Retrying...")
             time.sleep(3)
             retries -= 1

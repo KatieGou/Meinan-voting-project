@@ -15,21 +15,51 @@ redis_client = redis.Redis(
     decode_responses=app_config.DECODE_RESPONSES,
 )
 
-while True:
-    try:
-        conn = psycopg2.connect(
-            dbname=app_config.DB_NAME,
-            user=app_config.DB_USER,
-            password=app_config.DB_PASSWORD,
-            host=app_config.DB_HOST,
-            port=app_config.DB_PORT,
-        )
-        cur = conn.cursor()
-        logging.info("Connected to PostgreSQL")
-        break
-    except psycopg2.OperationalError:
-        logging.warning("Could not connect to PostgreSQL. Retrying...")
-        time.sleep(3)
+# Define global variables for database connection
+conn = None
+cur = None
+
+
+def wait_for_redis():
+    retries = 5
+    while retries > 0:
+        try:
+            redis_client.ping()
+            logging.info("Connected to Redis")
+            break
+        except redis.ConnectionError:
+            logging.warning("Could not connect to Redis. Retrying...")
+            time.sleep(3)
+            retries -= 1
+    if retries == 0:
+        raise Exception("Could not connect to Redis")
+
+
+def wait_for_postgres():
+    global conn, cur
+    retries = 5
+    while retries > 0:
+        try:
+            conn = psycopg2.connect(
+                dbname=app_config.DB_NAME,
+                user=app_config.DB_USER,
+                password=app_config.DB_PASSWORD,
+                host=app_config.DB_HOST,
+                port=app_config.DB_PORT,
+            )
+            cur = conn.cursor()
+            logging.info("Connected to PostgreSQL")
+            break
+        except psycopg2.OperationalError:
+            logging.warning("Could not connect to PostgreSQL. Retrying...")
+            time.sleep(3)
+            retries -= 1
+    if retries == 0:
+        raise Exception("Could not connect to PostgreSQL")
+
+
+wait_for_redis()
+wait_for_postgres()
 
 
 cur.execute("""

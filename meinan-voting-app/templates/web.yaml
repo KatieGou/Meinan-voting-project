@@ -1,9 +1,10 @@
+# web deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-web
+  name: {{ .Release.Name }}-web-deployment
 spec:
-  replicas: {{ .Values.web.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   selector: 
     matchLabels: 
       app: {{ .Release.Name }}-web
@@ -20,7 +21,22 @@ spec:
             - containerPort: {{ .Values.web.service.port }}
           env:
             - name: REDIS_HOST
-              value: {{ .Values.web.env.REDIS_HOST | quote }}
+              value: {{ .Release.Name }}-{{ .Values.redis.service.name }}
             - name: REDIS_PORT
               value: {{ .Values.web.env.REDIS_PORT | quote }}
             
+---
+
+# web service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.web.service.name }}
+spec:
+  selector:
+    app: {{ .Release.Name }}-web
+  ports:
+    - protocol: {{ .Values.web.service.protocol }}
+      port: {{ .Values.web.service.port }}
+      targetPort: {{ .Values.web.service.targetPort }}
+  type: {{ .Values.web.service.type }}

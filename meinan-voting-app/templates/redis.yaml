@@ -1,37 +1,37 @@
-# # Redis Deployment
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: {{ .Release.Name }}-redis-deployment
-# spec:
-#   replicas: {{ .Values.replicaCount }}
-#   selector: 
-#     matchLabels: 
-#       app: {{ .Release.Name }}-redis
-#   template:
-#     metadata: 
-#       labels: 
-#         app: {{ .Release.Name }}-redis
-#     spec:
-#       containers: 
-#         - name: redis
-#           image: {{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}
-#           imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
-#           ports: 
-#             - containerPort: {{ .Values.redis.service.port }}
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-redis-deployment
+spec:
+  replicas: {{ .Values.redis.replicas }}
+  selector: 
+    matchLabels: 
+      app: {{ .Release.Name }}-redis
+  template:
+    metadata: 
+      labels: 
+        app: {{ .Release.Name }}-redis
+    spec:
+      containers: 
+        - name: redis
+          image: {{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+          ports: 
+            - containerPort: {{ .Values.redis.service.port }}
 
-# ---
+---
 
-# # Redis Service
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: {{ .Release.Name }}-redis-service
-# spec:
-#   selector:
-#     app: {{ .Release.Name }}-redis
-#   ports:
-#     - protocol: {{ .Values.redis.service.protocol }}
-#       port: {{ .Values.redis.service.port }}
-#       targetPort: {{ .Values.redis.service.targetPort }}
-#   type: {{ .Values.redis.service.type }}
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.redis.service.name }}
+spec:
+  selector:
+    app: {{ .Release.Name }}-redis
+  ports:
+    - protocol: {{ .Values.redis.service.protocol }}
+      port: {{ .Values.redis.service.port }}
+      targetPort: {{ .Values.redis.service.targetPort }}
+  type: {{ .Values.redis.service.type }}

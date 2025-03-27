@@ -78,6 +78,8 @@ This project is a voting application built with Flask, Redis, and PostgreSQL. It
 ### Kubernetes
 - MiniKube start: `minikube start`
 - MiniKube dashboard: `minikube dashboard`
+- Point your shell to minikube's docker-daemon: `eval $(minikube -p minikube docker-env)`
+- Rebuild all images: `docker-compose build`
 - Check if an image exists in minikube: `minikube ssh 'docker images | grep <image-name>'`
 - Load an image into minikube: minikube image load <image-name>
 - Access Voting app via a browser: `minikube service <service-name>`

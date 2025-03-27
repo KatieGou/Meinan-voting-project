@@ -1,0 +1,48 @@
+# Result deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-result-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-result
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-result
+    spec:
+      containers:
+        - name: result
+          image: {{ .Values.result.image.repository }}:{{ .Values.result.image.tag }}
+          imagePullPolicy: {{ .Values.result.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.result.service.port }}
+          env:
+            - name: DB_USER
+              value: {{ .Values.worker.env.DB_USER | quote }}
+            - name: DB_PASSWORD
+              value: {{ .Values.worker.env.DB_PASSWORD | quote }}
+            - name: DB_HOST
+              value: {{ .Release.Name }}-{{ .Values.postgres.service.name }}
+            - name: DB_PORT
+              value: {{ .Values.worker.env.DB_PORT | quote }}
+            - name: DB_NAME
+              value: {{ .Values.worker.env.DB_NAME | quote }}
+
+---
+
+# Result service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.result.service.name }}
+spec:
+  selector:
+    app: {{ .Release.Name }}-result
+  ports:
+    - protocol: {{ .Values.result.service.protocol }}
+      port: {{ .Values.result.service.port }}
+      targetPort: {{ .Values.result.service.targetPort }}
+  type: {{ .Values.result.service.type }}
